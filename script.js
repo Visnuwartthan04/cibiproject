@@ -1,0 +1,73 @@
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    });
+});
+
+
+window.addEventListener('scroll', () => {
+    let parallaxBg = document.querySelector('.parallax-bg');
+    let scrollPosition = window.scrollY;
+    
+    parallaxBg.style.transform = `translateY(${scrollPosition * 0.5}px)`; 
+});
+
+const animateOnScroll = () => {
+    const elements = document.querySelectorAll('.tip-card, .color-box, .hero-content, .combo');
+    
+    elements.forEach(element => {
+        const rect = element.getBoundingClientRect();
+        const elementVisible = rect.top <= window.innerHeight && rect.bottom >= 0;
+        
+        if (elementVisible) {
+            element.classList.add('visible');
+        }
+    });
+};
+
+window.addEventListener('scroll', animateOnScroll);
+animateOnScroll();
+
+
+document.styleSheets[0].insertRule(`
+    .visible {
+        opacity: 1;
+        transform: translateY(0);
+        transition: all 0.6s ease-out;
+    }
+`, document.styleSheets[0].cssRules.length);
+
+document.styleSheets[0].insertRule(`
+    .tip-card, .color-box, .combo {
+        opacity: 0;
+        transform: translateY(50px);
+        transition: all 0.6s ease-out;
+    }
+`, document.styleSheets[0].cssRules.length);
+
+
+document.querySelectorAll('.color-box').forEach(colorBox => {
+    colorBox.addEventListener('mouseover', () => {
+        colorBox.style.transform = 'scale(1.1)';
+    });
+    
+    colorBox.addEventListener('mouseout', () => {
+        colorBox.style.transform = 'scale(1)';
+    });
+});
+
+
+document.querySelectorAll('.tip-card').forEach(card => {
+    card.addEventListener('mouseover', () => {
+        card.style.transform = 'scale(1.05)';
+    });
+
+    card.addEventListener('mouseout', () => {
+        card.style.transform = 'scale(1)';
+    });
+});
